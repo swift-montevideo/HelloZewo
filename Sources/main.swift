@@ -1,9 +1,10 @@
 import HTTPServer
 import Router
 import LogMiddleware
+import StandardOutputAppender
 
-let log = Log()
-let logger = LogMiddleware(log: log)
+let log = Logger(name: "example-logger", appender: StandardOutputAppender(), levels: .info)
+let logMidd = LogMiddleware(logger: log)
 
 let router = Router { route in
     route.get("/") { _ in
@@ -11,4 +12,4 @@ let router = Router { route in
     }
 }
 
-try Server(middleware: logger, responder: router).start()
+try Server(middleware: logMidd, responder: router).start()
