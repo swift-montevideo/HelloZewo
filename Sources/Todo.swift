@@ -1,18 +1,29 @@
 import Mustache
 import PostgreSQL
 
+struct Todo {
+    let id: Int
+    let text: String
+
+    init(id _id: Int, text _text: String) {
+        id = _id
+        text = _text
+    }
+}
+
+extension Todo: MustacheBoxable {
+
+    var mustacheBox: MustacheBox {
+        return [
+            "id": id.mustacheBox,
+            "text": text.mustacheBox
+        ].mustacheBox
+    }
+
+}
+
 
 struct TodoApp {
-
-    struct Todo {
-        let id: Int
-        let text: String
-
-        init(id _id: Int, text _text: String) {
-            id = _id
-            text = _text
-        }
-    }
 
     private func getAllTodos() throws -> [Todo] {
         let connection = Connection(host: "192.168.99.100", databaseName: "postgres", username: "postgres")
@@ -34,22 +45,23 @@ struct TodoApp {
     }
 
     func todoList() -> String {
+        let todos: [Todo]
         do {
-            let todos = try getAllTodos()
-            print(todos)
+            todos = try getAllTodos()
         } catch {
             return "Database Error"
         }
 
         do {
             // Load the `document.mustache` resource of the main bundle
-            let templateDef = "Hello {{name}}\n{{#late}}Well, on die{{/late}}"
+            let templateDef = "Hello {{name}}\n{{#late}}Well, on die{{/late}}\n{{#todos}}- {{text}} ({{id}}){{/todos}}"
             let template = try Template(string: templateDef)
 
             // The rendered data
             let data = [
                 "name": "Arthur".mustacheBox,
-                "late": false.mustacheBox
+                "late": false.mustacheBox,
+                "todos": todos.mustacheBox
             ]
 
             // The rendering: "Hello Arthur..."
