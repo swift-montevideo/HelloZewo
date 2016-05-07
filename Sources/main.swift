@@ -9,9 +9,24 @@ let logMidd = LogMiddleware(logger: log)
 let app = TodoApp()
 
 let router = Router { route in
+
     route.get("/") { _ in
         return Response(body: app.todoList())
-        // return Response(body: "<BODY><HEAD>hello world</HEAD></BODY>")
+    }
+
+    route.get("/AddNew") { _ in
+        return Response(body: app.addTodo())
+    }
+
+    route.post("/AddNew") { request in
+        do {
+            var body = request.body
+            let dataBuffer = try body.becomeBuffer()
+            let text = try String(data: dataBuffer)
+            return Response(body: app.addTodo(text: text))
+        } catch {
+            return Response(body: "Error")
+        }
     }
 }
 

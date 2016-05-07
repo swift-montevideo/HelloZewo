@@ -5,8 +5,11 @@
     <body>
         <h1>Hello Todos</h1>
             {{#todos}}
-                <pre>- {{text}} ({{id}})</pre>
+                - {{text}} ({{id}})<br>
             {{/todos}}
-        <button>Add Todo</button>
+            <br>
+            <form action="AddNew" method="get">
+                <input type="submit" value="Add New">
+            </form>
     </body>
 </html>
