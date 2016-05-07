@@ -54,13 +54,10 @@ struct TodoApp {
 
         do {
             // Load the `document.mustache` resource of the main bundle
-            let templateDef = "Hello {{name}}\n{{#late}}Well, on die{{/late}}\n{{#todos}}- {{text}} ({{id}}){{/todos}}"
-            let template = try Template(string: templateDef)
+            let template = try Template(path: "./Templates/index.mustache")
 
             // The rendered data
             let data = [
-                "name": "Arthur".mustacheBox,
-                "late": false.mustacheBox,
                 "todos": todos.mustacheBox
             ]
 
