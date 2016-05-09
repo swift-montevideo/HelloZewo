@@ -35,6 +35,10 @@ let router = Router { routeBuilder in
     routeBuilder.get("/AddNew", respond: app.addView)
 
     routeBuilder.post("/AddNew", respond: app.addView)
+
+    routeBuilder.get("/Remove", respond: app.removeView)
+
+    routeBuilder.post("/Remove", respond: app.removeView)
 }
 
 try Server(middleware: logMidd, responder: router).start()

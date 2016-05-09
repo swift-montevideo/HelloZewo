@@ -68,4 +68,49 @@ struct TodoServer {
         }
     }
 
+    func removeView(request: Request) -> ResponseRepresentable {
+
+        switch request.method {
+
+            case .post:
+                do {
+                    var body = request.body
+                    let dataBuffer = try body.becomeBuffer()
+                    let text = try String(data: dataBuffer)
+                    let value = text.split(byString: "=")[1]
+                    try store.addNew(withText: value)
+                } catch {
+                    return "Database error"
+                }
+
+                return listView(request: request)
+
+            case .get:
+
+                let todos: [Todo]
+
+                do {
+                    todos = try store.getAll()
+                } catch {
+                    return "Database Error"
+                }
+
+                do {
+                    let responsePage = try Template(path: "./Templates/remove.mustache")
+
+                    let data = [
+                        "todos": todos.mustacheBox
+                    ]
+
+                    return try responsePage.render(box: data.mustacheBox)
+
+                } catch {
+                    return "Mustache error"
+                }
+
+            default:
+                return "Unsuported method: \(request.method)"
+        }
+
+    }
 }

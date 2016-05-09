@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Hello Todos</title>
+    </head>
+    <body>
+        <h1>Hello Remove Todo</h1>
+            <form action="Remove" method="post">
+                {{#todos}}
+                <label for="{{text}}">{{text}}</label>
+                <input type="radio" name="removeId" id="{{id}}" value="{{id}}"><br>
+                {{/todos}}
+                <input type="submit" value="Remove">
+            </form>
+    </body>
+</html>
