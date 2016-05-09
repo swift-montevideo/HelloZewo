@@ -1,13 +1,13 @@
 import Mustache
 import HTTPServer
+import String
 
 
 extension String: ResponseRepresentable {
-    var response: Response {
-        Response(body: self)
+    public var response: Response {
+        return Response(body: self)
     }
 }
-
 
 struct TodoServer {
 
@@ -54,13 +54,13 @@ struct TodoServer {
             var body = request.body
             let dataBuffer = try body.becomeBuffer()
             let text = try String(data: dataBuffer)
-            let value = text.byString("=")[1]
-            try store.addNew(withText: text)
+            let value = text.split(byString: "=")[1]
+            try store.addNew(withText: value)
         } catch {
             return "Database error"
         }
 
-        return list()
+        return listView(request: request)
     }
 
 }

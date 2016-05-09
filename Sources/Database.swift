@@ -3,17 +3,15 @@ import PostgreSQL
 
 struct Database {
 
-    let host: String
+    private let host: String
 
-    init(host: host) {
+    init(host: String) {
         self.host = host
     }
 
-    private var connection: Connection {
-        return Connection(host: host, databaseName: "postgres", username: "postgres")
-    }
-
     func getAll() throws -> [Todo] {
+        let connection = Connection(host: self.host, databaseName: "postgres", username: "postgres")
+
         defer {
             connection.close()
         }
@@ -29,6 +27,8 @@ struct Database {
     }
 
     func addNew(withText text: String) throws {
+        let connection = Connection(host: host, databaseName: "postgres", username: "postgres")
+        
         defer {
             connection.close()
         }

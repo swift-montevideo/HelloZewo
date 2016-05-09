@@ -6,15 +6,17 @@ import StandardOutputAppender
 
 extension RouterBuilder {
 
-    public func get(_ path: String, middleware: Middleware..., responseTransformable: ResponseRepresentable) {
-        let responder = BasicResponder(responseTransformable.response)
-        get(path, middleware: middleware, responder: responder)
+    typealias RespondRepresentable = (Request) -> ResponseRepresentable
+
+    func get(_ path: String, respond: RespondRepresentable) {
+        let responder = BasicResponder { respond($0).response }
+        get(path, responder: responder)
     }
 
 
-    public func post(_ path: String, middleware: Middleware..., responseTransformable: ResponseRepresentable) {
-        let responder = BasicResponder(responseTransformable.response)
-        post(path, middleware: middleware, responder: responder)
+    func post(_ path: String, respond: RespondRepresentable) {
+        let responder = BasicResponder { respond($0).response }
+        post(path, responder: responder)
     }
 
 }
@@ -28,11 +30,14 @@ let app = TodoServer()
 
 let router = Router { routeBuilder in
 
-    routeBuilder.get("/", app.listView)
+    // routeBuilder.get("/") { _ in
+    //     return Response(body: "OK")
+    // }
+    routeBuilder.get("/", respond: app.listView)
 
-    routeBuilder.get("/AddNew", app.addView)
+    routeBuilder.get("/AddNew", respond: app.addView)
 
-    routeBuilder.post("/AddNew", app.add)
+    routeBuilder.post("/AddNew", respond: app.add)
 }
 
 try Server(middleware: logMidd, responder: router).start()
