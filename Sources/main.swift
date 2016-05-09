@@ -21,8 +21,6 @@ extension RouterBuilder {
 
 }
 
-
-
 let log = Logger(name: "TodoServerLogger", appender: StandardOutputAppender(), levels: .info)
 let logMidd = LogMiddleware(logger: log)
 
@@ -31,13 +29,12 @@ let app = TodoServer()
 let router = Router { routeBuilder in
 
     routeBuilder.get("/", respond: app.listView)
+    routeBuilder.post("/", respond: app.listView)
 
     routeBuilder.get("/AddNew", respond: app.addView)
-
     routeBuilder.post("/AddNew", respond: app.addView)
 
     routeBuilder.get("/Remove", respond: app.removeView)
-
     routeBuilder.post("/Remove", respond: app.removeView)
 }
 

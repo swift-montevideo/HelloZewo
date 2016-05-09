@@ -9,13 +9,55 @@ extension String: ResponseRepresentable {
     }
 }
 
+extension Response: ResponseRepresentable {
+    public var response: Response {
+        return self
+    }
+}
+
 struct TodoServer {
 
     //PostgreSQL running on local docker
     private let store = Database(host: "192.168.99.100")
 
-    func listView(request: Request) -> ResponseRepresentable {
+    private func getParamsFor(_ request: Request) throws -> [String:String]? {
 
+        guard case .buffer(let dataBuffer) = request.body else {
+            //should throw something...
+            return nil
+        }
+
+        let text = try String(data: dataBuffer)
+
+        if text.contains("=") {
+
+            var keys: [String] = []
+            var values: [String] = []
+
+            for (idx, str) in text.split(byString: "=").enumerated() {
+
+                var parsedStr = str
+                parsedStr.replace(string: "+", with: " ")
+
+                if idx % 2 == 0 {
+                    keys.append(parsedStr)
+                } else {
+                    values.append(parsedStr)
+                }
+            }
+
+            return zip(keys, values).reduce([String:String](), combine: { partial, kv in
+                var tmp = partial
+                tmp[kv.0] = kv.1
+                return tmp
+            })
+
+        } else {
+            return nil
+        }
+    }
+
+    private func renderTodosWithTemplateAt(path: String) -> String {
         let todos: [Todo]
 
         do {
@@ -25,7 +67,7 @@ struct TodoServer {
         }
 
         do {
-            let responsePage = try Template(path: "./Templates/index.mustache")
+            let responsePage = try Template(path: path)
 
             let data = [
                 "todos": todos.mustacheBox
@@ -38,22 +80,27 @@ struct TodoServer {
         }
     }
 
+    func listView(request: Request) -> ResponseRepresentable {
+        return renderTodosWithTemplateAt(path: "./Templates/index.mustache")
+    }
+
     func addView(request: Request) -> ResponseRepresentable {
 
         switch request.method {
 
             case .post:
                 do {
-                    var body = request.body
-                    let dataBuffer = try body.becomeBuffer()
-                    let text = try String(data: dataBuffer)
-                    let value = text.split(byString: "=")[1]
-                    try store.addNew(withText: value)
+                    if let parameters = try getParamsFor(request),
+                        let value = parameters["text"] {
+                        try store.add(withText: value)
+                    } else {
+                        return "Missing parameters in request body"
+                    }
                 } catch {
                     return "Database error"
                 }
 
-                return listView(request: request)
+                return Response(status: .permanentRedirect, headers: ["Location": "/"])
 
             case .get:
                 do {
@@ -73,40 +120,23 @@ struct TodoServer {
         switch request.method {
 
             case .post:
+
                 do {
-                    var body = request.body
-                    let dataBuffer = try body.becomeBuffer()
-                    let text = try String(data: dataBuffer)
-                    let value = text.split(byString: "=")[1]
-                    try store.addNew(withText: value)
+                    if let parameters = try getParamsFor(request),
+                        let stringValue = parameters["removeId"],
+                        let value = Int(stringValue) {
+                        try store.remove(withId: value)
+                    } else {
+                        return "Missing parameters in request body"
+                    }
                 } catch {
                     return "Database error"
                 }
 
-                return listView(request: request)
+                return Response(status: .permanentRedirect, headers: ["Location": "/"])
 
             case .get:
-
-                let todos: [Todo]
-
-                do {
-                    todos = try store.getAll()
-                } catch {
-                    return "Database Error"
-                }
-
-                do {
-                    let responsePage = try Template(path: "./Templates/remove.mustache")
-
-                    let data = [
-                        "todos": todos.mustacheBox
-                    ]
-
-                    return try responsePage.render(box: data.mustacheBox)
-
-                } catch {
-                    return "Mustache error"
-                }
+                return renderTodosWithTemplateAt(path: "./Templates/remove.mustache")
 
             default:
                 return "Unsuported method: \(request.method)"

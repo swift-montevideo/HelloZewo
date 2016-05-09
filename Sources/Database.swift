@@ -17,7 +17,6 @@ struct Database {
         }
 
         try connection.open()
-
         return try connection.execute("SELECT * FROM TODOS")
             .map { row in
                 let id: Int = try row.value("id")
@@ -26,14 +25,25 @@ struct Database {
             }
     }
 
-    func addNew(withText text: String) throws {
+    func add(withText text: String) throws {
         let connection = Connection(host: host, databaseName: "postgres", username: "postgres")
-        
+
         defer {
             connection.close()
         }
 
         try connection.open()
         try connection.execute("INSERT INTO TODOS(text) VALUES(%@)", parameters: text)
+    }
+
+    func remove(withId id: Int) throws {
+        let connection = Connection(host: host, databaseName: "postgres", username: "postgres")
+
+        defer {
+            connection.close()
+        }
+
+        try connection.open()
+        try connection.execute("DELETE FROM TODOS WHERE id = %@", parameters: id)
     }
 }
