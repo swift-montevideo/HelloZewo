@@ -40,27 +40,32 @@ struct TodoServer {
 
     func addView(request: Request) -> ResponseRepresentable {
 
-        do {
-            let responsePage = try Template(path: "./Templates/addNew.mustache")
-            return try responsePage.render()
-        } catch {
-            return "Strange error"
+        switch request.method {
+
+            case .post:
+                do {
+                    var body = request.body
+                    let dataBuffer = try body.becomeBuffer()
+                    let text = try String(data: dataBuffer)
+                    let value = text.split(byString: "=")[1]
+                    try store.addNew(withText: value)
+                } catch {
+                    return "Database error"
+                }
+
+                return listView(request: request)
+
+            case .get:
+                do {
+                    let responsePage = try Template(path: "./Templates/addNew.mustache")
+                    return try responsePage.render()
+                } catch {
+                    return "Strange error"
+                }
+
+            default:
+                return "Unsuported method: \(request.method)"
         }
-
-    }
-
-    func add(request: Request) -> ResponseRepresentable {
-        do {
-            var body = request.body
-            let dataBuffer = try body.becomeBuffer()
-            let text = try String(data: dataBuffer)
-            let value = text.split(byString: "=")[1]
-            try store.addNew(withText: value)
-        } catch {
-            return "Database error"
-        }
-
-        return listView(request: request)
     }
 
 }

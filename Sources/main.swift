@@ -30,14 +30,11 @@ let app = TodoServer()
 
 let router = Router { routeBuilder in
 
-    // routeBuilder.get("/") { _ in
-    //     return Response(body: "OK")
-    // }
     routeBuilder.get("/", respond: app.listView)
 
     routeBuilder.get("/AddNew", respond: app.addView)
 
-    routeBuilder.post("/AddNew", respond: app.add)
+    routeBuilder.post("/AddNew", respond: app.addView)
 }
 
 try Server(middleware: logMidd, responder: router).start()
