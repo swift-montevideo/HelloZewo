@@ -3,31 +3,36 @@ import Router
 import LogMiddleware
 import StandardOutputAppender
 
-let log = Logger(name: "example-logger", appender: StandardOutputAppender(), levels: .info)
+
+extension RouterBuilder {
+
+    public func get(_ path: String, middleware: Middleware..., responseTransformable: ResponseRepresentable) {
+        let responder = BasicResponder(responseTransformable.response)
+        get(path, middleware: middleware, responder: responder)
+    }
+
+
+    public func post(_ path: String, middleware: Middleware..., responseTransformable: ResponseRepresentable) {
+        let responder = BasicResponder(responseTransformable.response)
+        post(path, middleware: middleware, responder: responder)
+    }
+
+}
+
+
+
+let log = Logger(name: "TodoServerLogger", appender: StandardOutputAppender(), levels: .info)
 let logMidd = LogMiddleware(logger: log)
 
-let app = TodoApp()
+let app = TodoServer()
 
-let router = Router { route in
+let router = Router { routeBuilder in
 
-    route.get("/") { _ in
-        return Response(body: app.todoList())
-    }
+    routeBuilder.get("/", app.listView)
 
-    route.get("/AddNew") { _ in
-        return Response(body: app.addTodo())
-    }
+    routeBuilder.get("/AddNew", app.addView)
 
-    route.post("/AddNew") { request in
-        do {
-            var body = request.body
-            let dataBuffer = try body.becomeBuffer()
-            let text = try String(data: dataBuffer)
-            return Response(body: app.addTodo(text: text))
-        } catch {
-            return Response(body: "Error")
-        }
-    }
+    routeBuilder.post("/AddNew", app.add)
 }
 
 try Server(middleware: logMidd, responder: router).start()
