@@ -13,7 +13,6 @@ extension RouterBuilder {
         get(path, responder: responder)
     }
 
-
     func post(_ path: String, respond: RespondRepresentable) {
         let responder = BasicResponder { respond($0).response }
         post(path, responder: responder)
@@ -38,4 +37,4 @@ let router = Router { routeBuilder in
     routeBuilder.post("/Remove", respond: app.removeView)
 }
 
-try Server(middleware: logMidd, responder: router).start()
+try Server(port: 80, middleware: logMidd, responder: router).start()

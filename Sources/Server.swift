@@ -17,8 +17,8 @@ extension Response: ResponseRepresentable {
 
 struct TodoServer {
 
-    //PostgreSQL running on local docker
-    private let store = Database(host: "192.168.99.100")
+    //PostgreSQL running on linked docker
+    private let store = Database(host: "PSQL")
 
     private func getParamsFor(_ request: Request) throws -> [String:String]? {
 
