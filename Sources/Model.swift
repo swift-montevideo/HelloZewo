@@ -4,11 +4,6 @@ import Mustache
 struct Todo {
     let id: Int
     let text: String
-
-    init(id _id: Int, text _text: String) {
-        id = _id
-        text = _text
-    }
 }
 
 extension Todo: MustacheBoxable {

@@ -3,28 +3,14 @@ import Router
 import LogMiddleware
 import StandardOutputAppender
 
-
-extension RouterBuilder {
-
-    typealias RespondRepresentable = (Request) -> ResponseRepresentable
-
-    func get(_ path: String, respond: RespondRepresentable) {
-        let responder = BasicResponder { respond($0).response }
-        get(path, responder: responder)
-    }
-
-    func post(_ path: String, respond: RespondRepresentable) {
-        let responder = BasicResponder { respond($0).response }
-        post(path, responder: responder)
-    }
-
-}
-
+// Log middleware to monitor the requests
 let log = Logger(name: "TodoServerLogger", appender: StandardOutputAppender(), levels: .info)
 let logMidd = LogMiddleware(logger: log)
 
+// The todo core app
 let app = TodoServer()
 
+//Build the routes that point to the core
 let router = Router { routeBuilder in
 
     routeBuilder.get("/", respond: app.listView)
@@ -37,4 +23,5 @@ let router = Router { routeBuilder in
     routeBuilder.post("/Remove", respond: app.removeView)
 }
 
+// Start the server loop
 try Server(port: 80, middleware: logMidd, responder: router).start()

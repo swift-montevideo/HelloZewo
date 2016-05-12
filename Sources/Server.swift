@@ -79,7 +79,10 @@ struct TodoServer {
             return "Mustache error"
         }
     }
+}
 
+extension TodoServer {
+    
     func listView(request: Request) -> ResponseRepresentable {
         return renderTodosWithTemplateAt(path: "./Templates/index.mustache")
     }
