@@ -13,6 +13,9 @@ let app = TodoServer()
 //Build the routes that point to the core
 let router = Router { routeBuilder in
 
+    //This calls to 'routeBuilder' map an HTTP method, POST and GET, to a
+    //function that receive a Request type and return a Response.
+
     routeBuilder.get("/", respond: app.listView)
     routeBuilder.post("/", respond: app.listView)
 

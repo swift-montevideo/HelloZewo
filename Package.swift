@@ -8,6 +8,7 @@ let package = Package(
         .Package(url: "https://github.com/Zewo/LogMiddleware.git", majorVersion: 0, minor: 5),
         .Package(url: "https://github.com/Zewo/PostgreSQL.git", majorVersion: 0, minor: 5),
         .Package(url: "https://github.com/Zewo/StandardOutputAppender", majorVersion: 0, minor: 5),
-        .Package(url: "https://github.com/Zewo/Mustache.git", majorVersion: 0, minor: 5)
+        .Package(url: "https://github.com/Zewo/Mustache.git", majorVersion: 0, minor: 5),
+        .Package(url: "https://github.com/Zewo/URLEncodedForm.git", majorVersion: 0, minor: 5),
     ]
 )

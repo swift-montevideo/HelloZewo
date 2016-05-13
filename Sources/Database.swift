@@ -3,6 +3,8 @@ import PostgreSQL
 
 struct Database {
 
+    //The host where the database server is running. It can be an IP address or
+    //a valid DNS name
     private let host: String
 
     init(host: String) {

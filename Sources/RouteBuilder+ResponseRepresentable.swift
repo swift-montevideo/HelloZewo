@@ -1,5 +1,10 @@
 import Router
 
+//The default implementation of RouterBuilder allow us to use
+//functions with type: (Request) -> Response to attend the HTTP requests
+
+//This extension add two methods that allow to register functions
+//with type: (Request) -> ResponseRepresentable as handlers.
 
 extension RouterBuilder {
 

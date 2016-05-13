@@ -6,6 +6,8 @@ struct Todo {
     let text: String
 }
 
+//This extension describe how the Todo objects should be rendered in the Mustache
+//templates.
 extension Todo: MustacheBoxable {
 
     var mustacheBox: MustacheBox {
