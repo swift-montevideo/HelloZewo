@@ -2,7 +2,7 @@
 Server Side Swift example using Zewo components
 
 ## What's this?
-This is an example of an web app using [Zewo](http://www.zewo.io/) components and standar server-side tools like [Docker](https://www.docker.com/) I write this as an example to expose in a meetup [here](http://www.meetup.com/es-ES/Swift-Montevideo/events/230576236/). [This](http://www.slideshare.net/BrunoBerisso/server-side-swift-61958599) are the slies for the event.
+This is an example of an web app using [Zewo](http://www.zewo.io/) components and standard server-side tools like [Docker](https://www.docker.com/) I wrote this as an example to expose in a meetup [here](http://www.meetup.com/es-ES/Swift-Montevideo/events/230576236/). [This](http://www.slideshare.net/BrunoBerisso/server-side-swift-61958599) are the slies for the event.
 
 ## Setup
 
@@ -20,17 +20,17 @@ $ echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/
 ```
 > Change `~/.bash_profile` for `~/.zshrc` for ZSH
 
-### Instal Postgre drivers
-This project use the [PostgreSQL](https://github.com/Zewo/PostgreSQL) Zewo package. For it to work we need to install the native Postgre drivers. We can do it with homebrew like this:
+### Install PostgreSQL drivers
+This project uses the [PostgreSQL](https://github.com/Zewo/PostgreSQL) Zewo package. For it to work we need to install the native Postgres drivers. We can do it with homebrew like this:
 ```sh
 $ brew install postgresql
 ```
 
 ### Install Docker
-This project use docker to run the databse server. Follow the installation steps for OSX [here](https://www.docker.com/products/docker-toolbox).
+This project uses docker to run the databse server. Follow the installation steps for OSX [here](https://www.docker.com/products/docker-toolbox).
 
-To check that you have a working docker installation you can run `docker run hello-world` If that doesn't fail you are ready to continue.
-Once you have a working docker installation we need to get a Postgre image from [DockerHub](https://hub.docker.com/). This means we have to run:
+To check that you have a working docker installation you can run `docker run hello-world`. If that doesn't fail you are ready to continue.
+Once you have a working docker installation we need to get a Postgres image from [DockerHub](https://hub.docker.com/). This means we have to run:
 ```sh
 $ docker pull postgres
 ```
@@ -41,8 +41,8 @@ $ docker run --name PSQL -p 5432:5432 posgres -d
 $ psql -h PSQL -p 5432 -U postgres
 ```
 
-The first line start the Postgres server in docker and the second run the native client `psql` from your machine and connect to the docker container.
-You can do many other things, che the docs [here](https://hub.docker.com/_/postgres/).
+The first line starts the Postgres server in docker and the second runs the native client `psql` from your machine and connects to the docker container.
+You can do many other things, see the docs [here](https://hub.docker.com/_/postgres/).
 
 ### Clone this repo
 Go to a safe place to store this nice example project and run:
@@ -50,10 +50,12 @@ Go to a safe place to store this nice example project and run:
 $ git clone https://github.com/swift-montevideo/HelloZewo.git
 ```
 
-Once it finish `cd` into it and run:
+Once it finishes, `cd` into it and run:
+```sh
 swiftenv install DEVELOPMENT-SNAPSHOT-2016-04-12-a
+```
 
-This will download the Swift beta form Swift.org. This repo is configured (via `.swift-version`) to use that snapshot. When the installation finish try:
+This will download the Swift beta form Swift.org. This repo is configured (via `.swift-version`) to use that snapshot. When the installation finishes, try:
 
 ## Build
 Once you have the project setup the only thing you have to do is tell SPM to build this package. To do so we use:
@@ -69,7 +71,7 @@ To run this we first have to start the Postgres container. If you *don't* start 
 $ docker run --name PSQL -p 5432:5432 posgres -d
 ```
 
-Once the database server is running start this awesome app with:
+Once the database server is running, start this awesome app with:
 ```sh
 $ sudo .build/debug/hello
 ```
