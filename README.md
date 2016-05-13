@@ -2,7 +2,7 @@
 Server Side Swift example using Zewo components
 
 ## What's this?
-This is an example of an web app using [Zewo](http://www.zewo.io/) components and standard server-side tools like [Docker](https://www.docker.com/) I wrote this as an example to expose in a meetup [here](http://www.meetup.com/es-ES/Swift-Montevideo/events/230576236/). [This](http://www.slideshare.net/BrunoBerisso/server-side-swift-61958599) are the slies for the event.
+This is an example of an web app using [Zewo](http://www.zewo.io/) components and standard server-side tools like [Docker](https://www.docker.com/) I wrote this as an example to expose in a meetup [here](http://www.meetup.com/es-ES/Swift-Montevideo/events/230576236/). [These](http://www.slideshare.net/BrunoBerisso/server-side-swift-61958599) are the slies for the event.
 
 ## Setup
 
