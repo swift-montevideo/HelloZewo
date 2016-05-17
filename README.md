@@ -4,6 +4,10 @@ Server Side Swift example using Zewo components
 ## What's this?
 This is an example of an web app using [Zewo](http://www.zewo.io/) components and standard server-side tools like [Docker](https://www.docker.com/) I wrote this as an example to expose in a meetup [here](http://www.meetup.com/es-ES/Swift-Montevideo/events/230576236/). [These](http://www.slideshare.net/BrunoBerisso/server-side-swift-61958599) are the slies for the event.
 
+This example is a TODO manager. It allows listing, adding and removing TODOs form a list. Each TODO consists of a _"title"_ given by the user and an _"id"_ that comes form the app.
+
+All the logic is server-side, there is no JavaScript involved. There is one page for each action (list, remove, add) and each page has a corresponding mustache template in the `/Templates` directory. All requests are fired from the page using plain old `<form/>` tags with the corresponding `method` attribute set.
+
 ## Setup
 
 ### Install Swiftenv
@@ -55,7 +59,11 @@ Once it finishes, `cd` into it and run:
 swiftenv install DEVELOPMENT-SNAPSHOT-2016-04-12-a
 ```
 
-This will download the Swift beta form Swift.org. This repo is configured (via `.swift-version`) to use that snapshot. When the installation finishes, try:
+This will download the Swift beta form Swift.org. This repo is configured (via `.swift-version`) to use that snapshot. When the installation finishes check the correct version of swift is set:
+```sh
+$ swiftenv version
+DEVELOPMENT-SNAPSHOT-2016-04-12-a (set by [path where you clone the repo]/.swift-version)
+```
 
 ## Build
 Once you have the project setup the only thing you have to do is tell SPM to build this package. To do so we use:
